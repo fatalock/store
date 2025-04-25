@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "5ZNurNCq6Jcp/1h6sIhXaW8ZnotivZ1tnEnTNck96ZY=",
+  "Source": "OpenCommerce.Api",
+  "BasePath": "_content/OpenCommerce.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
