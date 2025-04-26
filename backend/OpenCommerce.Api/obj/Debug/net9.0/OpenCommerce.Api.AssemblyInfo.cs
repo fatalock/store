@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("OpenCommerce.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+94c116706b3020dfb89f2ad52b9b4aeebc193402")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d8ca19709904343ff58db16411f882c33362b01d")]
 [assembly: System.Reflection.AssemblyProductAttribute("OpenCommerce.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("OpenCommerce.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
