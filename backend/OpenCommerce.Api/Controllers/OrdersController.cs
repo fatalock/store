@@ -71,4 +71,31 @@ public class OrdersController(ApplicationDbContext context) : ControllerBase
 
         return Ok(order);
     }
+    [HttpGet("byuser/{userId}")]
+    public async Task<IActionResult> GetOrdersByUserId(Guid userId)
+    {
+        var orders = await context.Orders
+            .Where(o => o.UserId == userId)
+            .Include(o => o.OrderItems)
+            .ThenInclude(oi => oi.Product)
+            .ToListAsync();
+
+        if (!orders.Any())
+            return NotFound("Bu kullanıcıya ait sipariş bulunamadı.");
+
+        return Ok(orders);
+    }
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteOrder(Guid id)
+    {
+        var order = await context.Orders.FindAsync(id);
+        if (order == null)
+            return NotFound();
+
+        context.Orders.Remove(order);
+        await context.SaveChangesAsync();
+        return NoContent();
+    }
+
+
 }

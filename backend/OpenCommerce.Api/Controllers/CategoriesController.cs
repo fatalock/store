@@ -22,6 +22,9 @@ public class CategoriesController(ApplicationDbContext context) : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateCategory([FromBody] Category category)
     {
+        var existingCategory = await context.Categories.FirstOrDefaultAsync(c => c.Name == category.Name);
+        if (existingCategory != null)
+            return Conflict("Bu isimde zaten bir kategori mevcut.");
         if (category == null || string.IsNullOrWhiteSpace(category.Name))
             return BadRequest("Kategori adı boş olamaz.");
 
@@ -47,6 +50,17 @@ public class CategoriesController(ApplicationDbContext context) : ControllerBase
     {
         var categories = await context.Categories.ToListAsync();
         return Ok(categories);
+    }
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteCategory(Guid id)
+    {
+        var category = await context.Categories.FindAsync(id);
+        if (category == null)
+            return NotFound();
+
+        context.Categories.Remove(category);
+        await context.SaveChangesAsync();
+        return NoContent();
     }
 
 }

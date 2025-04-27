@@ -68,6 +68,10 @@ public class ProductsController(ApplicationDbContext context) : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateProduct([FromBody] Product product)
     {
+        var existingProduct = await context.Products.FirstOrDefaultAsync(p => p.Name == product.Name);
+        if (existingProduct != null)
+            return Conflict("Bu isimde zaten bir ürün mevcut.");
+
         if (product == null)
             return BadRequest();
 
@@ -76,4 +80,53 @@ public class ProductsController(ApplicationDbContext context) : ControllerBase
 
         return CreatedAtAction(nameof(GetById), new { id = product.Id }, product);
     }
+
+    [HttpPost("{id}/addstock")]
+    public async Task<IActionResult> AddStock(Guid id, [FromBody] int quantityToAdd)
+    {
+        var product = await context.Products.FindAsync(id);
+        if (product == null)
+            return NotFound();
+
+        if (quantityToAdd <= 0)
+            return BadRequest("Eklenen miktar pozitif olmalıdır.");
+
+        product.StockQuantity += quantityToAdd;
+
+        await context.SaveChangesAsync();
+
+        return NoContent();
+    }
+    [HttpPatch("{id}/price")]
+    public async Task<IActionResult> UpdateProductPrice(Guid id, [FromBody] decimal newPrice)
+    {
+        var product = await context.Products.FindAsync(id);
+        if (product == null)
+            return NotFound();
+
+        if (newPrice <= 0 || newPrice >= product.Price)
+            return BadRequest("yeni fiyat geçerli değil.");
+
+        product.OldPrice = product.Price;       // Mevcut fiyatı eski fiyat olarak kaydet
+        product.Price = newPrice;      // Yeni fiyatı ayarla
+
+        product.IsDiscounted = newPrice < product.OldPrice; // İndirim kontrolü
+
+        await context.SaveChangesAsync();
+
+        return NoContent();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteProduct(Guid id)
+    {
+        var product = await context.Products.FindAsync(id);
+        if (product == null)
+            return NotFound();
+
+        context.Products.Remove(product);
+        await context.SaveChangesAsync();
+        return NoContent();
+    }
+
 }

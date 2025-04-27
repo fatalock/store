@@ -1,12 +1,7 @@
 # store
 yapılacaklar:
 
-get user order
 
-delete user
-delete order
-delete product
-delete category
 
 
 
@@ -153,6 +148,9 @@ cevap:
 ------------
 GET /api/categories/{id}
 Belirli bir kategoriyi detaylı görüntülemek için:
+-----------
+DELETE /api/categories/{id}
+Belirli bir kategoriyi silmek için:
 
 ***************************
 Product İşlemleri
@@ -169,6 +167,16 @@ Yeni bir ürün eklemek için:
   "imageUrl": "https://example.com/image.jpg"
 }
 -----------
+POST /api/products/{productId}/addstock
+stock eklemece:
+
+5
+---------
+PATCH /api/{id}/price
+product new price
+
+120
+----------
 GET /api/products
 
 Tüm ürünleri listelemek için:
@@ -279,6 +287,10 @@ cevap:
         }
     ]
 }
+---------
+DELETE /api/products/{id}
+Belirli bir ürünü silmek için:
+
 **********************************
 
 User İşlemleri
@@ -309,6 +321,9 @@ cevap:
         "$values": []
     }
 }
+------------
+DELETE /api/users/{id}
+Belirli bir kullanıcıyı silmek için:
 **********************
 
 Order İşlemleri
@@ -320,8 +335,16 @@ Yeni bir sipariş oluşturmak için:
   "userId": "kullanici-uuid",
   "orderItems": [
     {
-      "productId": "ürün-uuid",
+      "productId": "urun1-uuid",
       "quantity": 2
+    },
+    {
+      "productId": "urun2-uuid",
+      "quantity": 1
+    },
+    {
+      "productId": "urun3-uuid",
+      "quantity": 5
     }
   ]
 }
@@ -358,3 +381,96 @@ cevap:
         ]
     }
 }
+----------
+GET /api/orders/byuser/{userId}
+Belirli bir kullanıcının tüm siparişlerini listelemek için:
+cevap:
+{
+    "$id": "1",
+    "$values": [
+        {
+            "$id": "6",
+            "id": "4b7e8c6b-e40b-4630-a1ff-bd1c470c90ff",
+            "userId": "ca0bf502-3888-43da-902f-603fdb2d7f83",
+            "user": null,
+            "createdAt": "2025-04-27T15:56:53.538109Z",
+            "totalPrice": 4500,
+            "status": "Pending",
+            "orderItems": {
+                "$id": "7",
+                "$values": [
+                    {
+                        "$id": "8",
+                        "id": "c91143c8-4e8b-48cf-aca7-cfd308d15516",
+                        "orderId": "4b7e8c6b-e40b-4630-a1ff-bd1c470c90ff",
+                        "order": {
+                            "$ref": "6"
+                        },
+                        "productId": "46452c20-d146-4b0d-8cbd-7669c3e65fcb",
+                        "product": {
+                            "$id": "9",
+                            "id": "46452c20-d146-4b0d-8cbd-7669c3e65fcb",
+                            "name": "Arçelik Espresso Makinesi",
+                            "description": "Yüksek basınçlı espresso makinesi",
+                            "price": 4500,
+                            "stockQuantity": 0,
+                            "imageUrl": "https://example.com/image.jpg",
+                            "categoryId": "fa3bf421-24b3-4146-bde9-20851b748d9c",
+                            "category": null
+                        },
+                        "quantity": 1,
+                        "unitPrice": 4500,
+                        "orderItemTotalPrice": 4500
+                    }
+                ]
+            }
+        },
+        {
+            "$id": "10",
+            "id": "7ae8855f-6de7-4c1f-9fa9-e810867858fa",
+            "userId": "ca0bf502-3888-43da-902f-603fdb2d7f83",
+            "user": null,
+            "createdAt": "2025-04-27T16:08:18.451757Z",
+            "totalPrice": 8000,
+            "status": "Pending",
+            "orderItems": {
+                "$id": "11",
+                "$values": [
+                    {
+                        "$id": "12",
+                        "id": "1bc82fcf-d003-4564-94a2-a891f06d861e",
+                        "orderId": "7ae8855f-6de7-4c1f-9fa9-e810867858fa",
+                        "order": {
+                            "$ref": "10"
+                        },
+                        "productId": "715a59b2-4542-4107-966a-f594db049991",
+                        "product": {
+                            "$ref": "5"
+                        },
+                        "quantity": 1,
+                        "unitPrice": 3500,
+                        "orderItemTotalPrice": 3500
+                    },
+                    {
+                        "$id": "13",
+                        "id": "71055dba-e2f2-46a3-bce5-670504978893",
+                        "orderId": "7ae8855f-6de7-4c1f-9fa9-e810867858fa",
+                        "order": {
+                            "$ref": "10"
+                        },
+                        "productId": "46452c20-d146-4b0d-8cbd-7669c3e65fcb",
+                        "product": {
+                            "$ref": "9"
+                        },
+                        "quantity": 1,
+                        "unitPrice": 4500,
+                        "orderItemTotalPrice": 4500
+                    }
+                ]
+            }
+        }
+    ]
+}
+---------
+DELETE /api/orders/{id}
+Belirli bir siparişi silmek için:
