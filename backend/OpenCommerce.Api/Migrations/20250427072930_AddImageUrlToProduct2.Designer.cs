@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using OpenCommerce.Api.Data;
@@ -11,9 +12,11 @@ using OpenCommerce.Api.Data;
 namespace OpenCommerce.Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250427072930_AddImageUrlToProduct2")]
+    partial class AddImageUrlToProduct2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,12 +35,7 @@ namespace OpenCommerce.Api.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("ParentCategoryId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("ParentCategoryId");
 
                     b.ToTable("Categories");
                 });
@@ -161,16 +159,6 @@ namespace OpenCommerce.Api.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("OpenCommerce.Api.Models.Category", b =>
-                {
-                    b.HasOne("OpenCommerce.Api.Models.Category", "ParentCategory")
-                        .WithMany("SubCategories")
-                        .HasForeignKey("ParentCategoryId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("ParentCategory");
-                });
-
             modelBuilder.Entity("OpenCommerce.Api.Models.Order", b =>
                 {
                     b.HasOne("OpenCommerce.Api.Models.User", "User")
@@ -215,8 +203,6 @@ namespace OpenCommerce.Api.Migrations
             modelBuilder.Entity("OpenCommerce.Api.Models.Category", b =>
                 {
                     b.Navigation("Products");
-
-                    b.Navigation("SubCategories");
                 });
 
             modelBuilder.Entity("OpenCommerce.Api.Models.Order", b =>

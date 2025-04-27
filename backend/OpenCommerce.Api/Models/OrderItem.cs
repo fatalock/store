@@ -12,14 +12,9 @@ public class OrderItem
 
     public int Quantity { get; set; }
     public decimal UnitPrice { get; set; }
-    public decimal OrderItemTotalPrice { get; private set; }
+    public decimal OrderItemTotalPrice { get; set; }
 
-    public OrderItem(int quantity, decimal unitPrice)
-    {
-        Quantity = quantity;
-        UnitPrice = unitPrice;
-        OrderItemTotalPrice = quantity * unitPrice;
-    }
+
 
     // Parameterless constructor (EF Core için zorunlu!)
     public OrderItem() { }

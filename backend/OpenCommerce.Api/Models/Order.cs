@@ -7,14 +7,10 @@ public class Order
     public User? User { get; set; }    // Navigation Property
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public decimal TotalPrice { get; private set; }  // İstersen bunu daha sonra OrderItem üzerinden hesaplatabiliriz
+    public decimal TotalPrice { get; set; }  // İstersen bunu daha sonra OrderItem üzerinden hesaplatabiliriz
     public string Status { get; set; } = "Pending"; // Pending, Paid, Shipped, Completed gibi
 
     // Siparişe ait ürünler
     public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 
-    public void UpdateTotalPrice()
-    {
-        TotalPrice = OrderItems.Sum(item => item.OrderItemTotalPrice);
-    }
 }
