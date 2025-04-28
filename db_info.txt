@@ -1,1 +1,12 @@
 password: MarsPostgre
+
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+npm start
+
+first time:
+npm install @mui/material @emotion/react @emotion/styled
+npm install @reduxjs/toolkit react-redux
+npm install react-router-dom
+npm install react-hook-form
+npm install notistack
+npm install axios
