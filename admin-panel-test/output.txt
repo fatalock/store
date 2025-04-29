@@ -1,0 +1,44 @@
+Folder PATH listing
+Volume serial number is 489F-7EEB
+C:.
+|   .gitignore
+|   output.txt
+|   package-lock.json
+|   package.json
+|   README.md
+|   
++---node_modules
+|   |   .package-lock.json
+|   |   
+|       
+\---src
+    |   App.css
+    |   App.js
+    |   App.test.js
+    |   index.css
+    |   index.js
+    |   logo.svg
+    |   reportWebVitals.js
+    |   setupTests.js
+    |   
+    +---api
+    +---app
+    |       store.js
+    |       
+    +---components
+    |       FormInput.jsx
+    |       Sidebar.jsx
+    |       
+    +---features
+    |   \---auth
+    |           authSlice.js
+    |           
+    +---layouts
+    |       DashboardLayout.jsx
+    |       
+    +---pages
+    |       DashboardPage.jsx
+    |       LoginPage.jsx
+    |       UserAddPage.jsx
+    |       
+    \---utils

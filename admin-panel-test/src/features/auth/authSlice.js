@@ -1,8 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const userFromSession = sessionStorage.getItem("user")
+  ? JSON.parse(sessionStorage.getItem("user"))
+  : null;
+
 const initialState = {
-  user: null,             // Kullanıcı bilgisi (email, id, rol vs.)
-  isAuthenticated: false, // Kullanıcı giriş yaptı mı
+  user: userFromSession,
+  isAuthenticated: !!userFromSession, // user varsa true
 };
 
 const authSlice = createSlice({
@@ -16,6 +20,7 @@ const authSlice = createSlice({
     logout: (state) => {
       state.user = null;
       state.isAuthenticated = false;
+      sessionStorage.removeItem("user"); // logout olduğunda sessionStorage da temizlenir
     },
   },
 });

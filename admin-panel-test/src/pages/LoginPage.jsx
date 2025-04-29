@@ -11,12 +11,11 @@ function LoginPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-
   const onSubmit = (data) => {
-    dispatch(loginSuccess(data));   // Kullanıcı bilgisini Redux'a kaydet
-    navigate("/dashboard");         // Başarılı giriş sonrası Dashboard'a yönlendir
+    dispatch(loginSuccess(data));                      // Redux'a yaz
+    sessionStorage.setItem("user", JSON.stringify(data)); // SessionStorage'a yaz
+    navigate("/dashboard");
   };
-  
 
   return (
     <Box
