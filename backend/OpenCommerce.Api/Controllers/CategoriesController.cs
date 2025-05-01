@@ -2,10 +2,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OpenCommerce.Api.Data;
 using OpenCommerce.Api.Models;
+using FluentValidation;
+
+namespace OpenCommerce.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class CategoriesController(ApplicationDbContext context) : ControllerBase
+public class CategoriesController(ApplicationDbContext context, IValidator<Category> validator) : ControllerBase
+
 {
 
     // GET: /api/categories/{parentCategoryId}/subcategories
@@ -22,11 +26,13 @@ public class CategoriesController(ApplicationDbContext context) : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateCategory([FromBody] Category category)
     {
-        var existingCategory = await context.Categories.FirstOrDefaultAsync(c => c.Name == category.Name);
-        if (existingCategory != null)
-            return Conflict("Bu isimde zaten bir kategori mevcut.");
-        if (category == null || string.IsNullOrWhiteSpace(category.Name))
-            return BadRequest("Kategori adı boş olamaz.");
+        var validationResult = await validator.ValidateAsync(category);
+
+        if (!validationResult.IsValid)
+        {
+            var errors = validationResult.Errors.Select(e => e.ErrorMessage);
+            return BadRequest(errors);
+        }
 
         await context.Categories.AddAsync(category);
         await context.SaveChangesAsync();

@@ -17,11 +17,21 @@ function UserAddPage() {
         try {
             console.log(data)
             await createUser(data);
-            alert("Kullanıcı eklendi");
+            alert("Kullanıcı başarıyla eklendi");
             reset();
         } catch (error) {
-            alert("Kayıt başarısız: " + error.response?.data || error.message);
-            reset();
+            const err = error.response?.data;
+            if (Array.isArray(err)) {
+                alert("Hatalar:\n" + err.join("\n"));
+            } else if (err?.errors) {
+                const messages = [];
+                for (const key in err.errors) {
+                    messages.push(...err.errors[key]);
+                }
+                alert("Hatalar:\n" + messages.join("\n"));
+            } else {
+                alert("Kayıt başarısız: " + JSON.stringify(err));
+            }
         }
     };
 

@@ -1,5 +1,11 @@
 password: MarsPostgre
 
+dotnet ef migrations add "MigrationAdi"
+dotnet ef database update
+
+dotnet run
+
+
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 npm start
 

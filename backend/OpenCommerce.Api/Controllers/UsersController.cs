@@ -2,25 +2,26 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OpenCommerce.Api.Data;
 using OpenCommerce.Api.Models;
+using FluentValidation;
 
 namespace OpenCommerce.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class UsersController(ApplicationDbContext context) : ControllerBase
+public class UsersController(ApplicationDbContext context, IValidator<User> validator) : ControllerBase
 {
 
     // POST: /api/users
     [HttpPost]
     public async Task<IActionResult> CreateUser([FromBody] User user)
     {
-        if (user == null)
-            return BadRequest();
+        var validationResult = await validator.ValidateAsync(user);
 
-        // Aynı email ile kullanıcı var mı kontrolü
-        var existingUser = await context.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
-        if (existingUser != null)
-            return Conflict("Bu email zaten kayıtlı.");
+        if (!validationResult.IsValid)
+        {
+            var errors = validationResult.Errors.Select(e => e.ErrorMessage);
+            return BadRequest(errors);  // veya: return ValidationProblem(...)
+        }
 
         await context.Users.AddAsync(user);
         await context.SaveChangesAsync();

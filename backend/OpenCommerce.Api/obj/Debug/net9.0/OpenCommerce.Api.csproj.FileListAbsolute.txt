@@ -129,3 +129,6 @@ C:\Users\fatih\Desktop\store\backend\OpenCommerce.Api\obj\Debug\net9.0\refint\Op
 C:\Users\fatih\Desktop\store\backend\OpenCommerce.Api\obj\Debug\net9.0\OpenCommerce.Api.pdb
 C:\Users\fatih\Desktop\store\backend\OpenCommerce.Api\obj\Debug\net9.0\OpenCommerce.Api.genruntimeconfig.cache
 C:\Users\fatih\Desktop\store\backend\OpenCommerce.Api\obj\Debug\net9.0\ref\OpenCommerce.Api.dll
+C:\Users\fatih\Desktop\store\backend\OpenCommerce.Api\bin\Debug\net9.0\FluentValidation.dll
+C:\Users\fatih\Desktop\store\backend\OpenCommerce.Api\bin\Debug\net9.0\FluentValidation.AspNetCore.dll
+C:\Users\fatih\Desktop\store\backend\OpenCommerce.Api\bin\Debug\net9.0\FluentValidation.DependencyInjectionExtensions.dll

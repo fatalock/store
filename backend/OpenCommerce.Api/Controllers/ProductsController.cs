@@ -2,12 +2,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OpenCommerce.Api.Data;
 using OpenCommerce.Api.Models;
+using FluentValidation;
 
 namespace OpenCommerce.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ProductsController(ApplicationDbContext context) : ControllerBase
+public class ProductsController(ApplicationDbContext context, IValidator<Product> validator) : ControllerBase
 {
 
     // GET: /api/products
@@ -68,12 +69,16 @@ public class ProductsController(ApplicationDbContext context) : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateProduct([FromBody] Product product)
     {
+        var validationResult = await validator.ValidateAsync(product);
+        if (!validationResult.IsValid)
+        {
+            var errors = validationResult.Errors.Select(e => e.ErrorMessage);
+            return BadRequest(errors);
+        }
+
         var existingProduct = await context.Products.FirstOrDefaultAsync(p => p.Name == product.Name);
         if (existingProduct != null)
             return Conflict("Bu isimde zaten bir ürün mevcut.");
-
-        if (product == null)
-            return BadRequest();
 
         await context.Products.AddAsync(product);
         await context.SaveChangesAsync();
@@ -110,7 +115,7 @@ public class ProductsController(ApplicationDbContext context) : ControllerBase
         product.OldPrice = product.Price;       // Mevcut fiyatı eski fiyat olarak kaydet
         product.Price = newPrice;      // Yeni fiyatı ayarla
 
-        product.IsDiscounted = newPrice < product.OldPrice; // İndirim kontrolü
+        product.IsDiscounted = product.OldPrice.HasValue && newPrice < product.OldPrice.Value;
 
         await context.SaveChangesAsync();
 

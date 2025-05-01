@@ -3,18 +3,23 @@ using Microsoft.EntityFrameworkCore;
 using OpenCommerce.Api.Data;
 using OpenCommerce.Api.Models;
 using OpenCommerce.Api.Models.Requests;
+using FluentValidation;
 
 namespace OpenCommerce.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class OrdersController(ApplicationDbContext context) : ControllerBase
+public class OrdersController(ApplicationDbContext context, IValidator<CreateOrderRequest> validator) : ControllerBase
 {
     [HttpPost]
     public async Task<IActionResult> CreateOrder([FromBody] CreateOrderRequest request)
     {
-        if (request == null || !request.OrderItems.Any())
-            return BadRequest("Sipariş verisi eksik.");
+        var validationResult = await validator.ValidateAsync(request);
+        if (!validationResult.IsValid)
+        {
+            var errors = validationResult.Errors.Select(e => e.ErrorMessage);
+            return BadRequest(errors);
+        }
 
         var order = new Order
         {
