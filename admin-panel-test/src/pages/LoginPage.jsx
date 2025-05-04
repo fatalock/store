@@ -1,6 +1,6 @@
 import { Box, Button, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
-import FormInput from "../components/FormInput";
+import FormInput from "../components/shared/FormInput";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";

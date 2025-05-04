@@ -64,6 +64,23 @@ public class OrdersController(ApplicationDbContext context, IValidator<CreateOrd
         return CreatedAtAction(nameof(GetOrderById), new { id = order.Id }, order);
     }
 
+    [HttpGet]
+    public async Task<IActionResult> GetAllOrders()
+    {
+        var orders = await context.Orders
+            .Select(u => new
+            {
+                u.Id,
+                u.UserId,
+                u.TotalPrice,
+                u.Status,
+                u.CreatedAt
+            })
+            .ToListAsync();
+
+        return Ok(orders);
+    }
+
     [HttpGet("{id}")]
     public async Task<IActionResult> GetOrderById(Guid id)
     {

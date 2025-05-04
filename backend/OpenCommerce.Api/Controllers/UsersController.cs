@@ -11,6 +11,22 @@ namespace OpenCommerce.Api.Controllers;
 public class UsersController(ApplicationDbContext context, IValidator<User> validator) : ControllerBase
 {
 
+    [HttpGet]
+    public async Task<IActionResult> GetAllUsers()
+    {
+        var users = await context.Users
+            .Select(u => new
+            {
+                u.Id,
+                u.Name,
+                u.Email,
+                u.CreatedAt
+            })
+            .ToListAsync();
+
+        return Ok(users);
+    }
+
     // POST: /api/users
     [HttpPost]
     public async Task<IActionResult> CreateUser([FromBody] User user)
