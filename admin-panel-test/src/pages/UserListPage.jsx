@@ -1,14 +1,19 @@
 import { useEffect, useState } from "react";
 import { Box, Button, Dialog } from "@mui/material";
 import UserAddForm from "../components/UserListpage/UserAddForm";
-import OrdersModal from "../components/UserListpage/OrdersModal";
 import ActionableTable from "../components/shared/ActionableTable";
-import { getUsers, deleteUser } from "../api/userApi";
+import { getUsers, deleteUser, updateUser } from "../api/userApi";
+import OrdersModal from "../components/UserListpage/OrdersModal"
+import UserEditModal from "../components/UserListpage/UserEditModal"
+
 
 function UserListPage() {
   const [users, setUsers] = useState([]);
   const [openAdd, setOpenAdd] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null); // 🆕 seçili kullanıcı
+  const [selectedUser2, setSelectedUser2] = useState(null);
+  const [editOpen, setEditOpen] = useState(false);
+
 
   const fetchUsers = async () => {
     try {
@@ -29,6 +34,20 @@ function UserListPage() {
     }
   };
 
+  const handleUserUpdate = async (updatedUser) => {
+    try {
+      await updateUser(selectedUser2.id, updatedUser);
+      await fetchUsers(); // Listeyi güncelle
+      setEditOpen(false);
+      setSelectedUser(null);
+    } catch (err) {
+      alert("Güncelleme başarısız.");
+      console.error(err);
+      console.log(err.response?.data);
+    }
+  };
+  
+
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -46,6 +65,7 @@ function UserListPage() {
           { key: "createdAt", label: "Oluşturulma" },
           { key: "name", label: "Ad" },
           { key: "email", label: "Email" },
+          { key: "passwordHash" , label: "Şifre"}
 
         ]}
         rows={users}
@@ -59,11 +79,22 @@ function UserListPage() {
         }}
         renderActions={(row) => (
           <>
-            <Button size="small" variant="outlined" sx={{ mr: 1 }}>Düzenle</Button>
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={() => {
+                setSelectedUser2(row); // `user` burada o satırdaki kullanıcı
+                setEditOpen(true);
+              }}
+            >
+              Düzenle
+            </Button>
+
             <Button
               size="small"
               color="error"
               variant="outlined"
+              sx={{ ml: 1 }}
               onClick={() => handleDelete(row.id)}
             >
               Sil
@@ -92,6 +123,16 @@ function UserListPage() {
           userName={selectedUser.name}
         />
       )}
+      <UserEditModal
+        open={editOpen}
+        onClose={() => {
+          setEditOpen(false);
+          setSelectedUser2(null);
+        }}
+        user={selectedUser2}
+        onSave={handleUserUpdate}
+      />
+
     </Box>
   );
 }

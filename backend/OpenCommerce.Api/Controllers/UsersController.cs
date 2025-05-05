@@ -8,7 +8,7 @@ namespace OpenCommerce.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class UsersController(ApplicationDbContext context, IValidator<User> validator) : ControllerBase
+public class UsersController(ApplicationDbContext context, IValidator<User> validator, UserValidatorForUpdate validatorPut ) : ControllerBase
 {
 
     [HttpGet]
@@ -20,7 +20,8 @@ public class UsersController(ApplicationDbContext context, IValidator<User> vali
                 u.Id,
                 u.Name,
                 u.Email,
-                u.CreatedAt
+                u.CreatedAt,
+                u.PasswordHash
             })
             .ToListAsync();
 
@@ -67,5 +68,32 @@ public class UsersController(ApplicationDbContext context, IValidator<User> vali
         await context.SaveChangesAsync();
         return NoContent();
     }
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateUser(Guid id, [FromBody] User updatedUser)
+    {
+        
+        var user = await context.Users.FindAsync(id);
+        if (user == null)
+            return NotFound();
+
+        user.Name = updatedUser.Name;
+        user.Email = updatedUser.Email;
+        if (!string.IsNullOrWhiteSpace(updatedUser.PasswordHash))
+        {
+            user.PasswordHash = updatedUser.PasswordHash;
+        }
+
+        var validationResult = await validatorPut.ValidateAsync(user);
+
+        if (!validationResult.IsValid)
+        {
+            var errors = validationResult.Errors.Select(e => e.ErrorMessage);
+            return BadRequest(errors);
+        }
+
+        await context.SaveChangesAsync();
+        return NoContent();
+    }
+
 
 }

@@ -9,6 +9,7 @@ using OpenCommerce.Api.Validators;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IValidator<User>, UserValidator>();
+builder.Services.AddScoped<UserValidatorForUpdate>();
 builder.Services.AddScoped<IValidator<Product>, ProductValidator>();
 builder.Services.AddScoped<IValidator<Category>, CategoryValidator>();
 builder.Services.AddScoped<IValidator<CreateOrderRequest>, CreateOrderRequestValidator>();
