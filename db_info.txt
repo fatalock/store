@@ -16,3 +16,16 @@ npm install react-router-dom
 npm install react-hook-form
 npm install notistack
 npm install axios
+{
+    "userId": "7ae7712d-c159-4334-a08b-920256f7e401",
+    "orderItems": [
+        {
+            "productId": "46452c20-d146-4b0d-8cbd-7669c3e65fcb",
+            "quantity": 1
+        },
+        {
+            "productId": "715a59b2-4542-4107-966a-f594db049991",
+            "quantity": 3
+        }
+    ]
+}
